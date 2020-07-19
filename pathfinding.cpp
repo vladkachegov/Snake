@@ -1,17 +1,13 @@
 #include "pathfinding.h"
 
-#include <queue>
-#include <QDebug>
-std::array<Node,4> ZoneMap::DIRS = {Node(-1,0),  //left
-                                    Node(1,0),  //right
-                                    Node(0,1),  // top
-                                    Node(0,-1)}; //bottom
 Pathfinding::Pathfinding()
 {
 
 }
 
-std::vector<Node> Pathfinding::find_path(ZoneMap &map, const Node &from, const Node &to)
+std::vector<Node> Pathfinding::find_path(ZoneMap &map,
+                                         const Node &from,
+                                         const Node &to)
 {
     using namespace std;
     unordered_map<Node,Node> visit_log;
@@ -57,3 +53,5 @@ bool operator==(const Node &node1, const Node &node2)
 {
     return ((node1.x==node2.x)&(node1.y==node2.y));
 }
+
+
