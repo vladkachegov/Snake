@@ -19,9 +19,12 @@ public:
     bool generate_snakes();
     std::vector<std::shared_ptr<Snake> > get_snakes() const;
     void prepare_controller();
+    void refresh_map();
     ~SnakeController();
 signals:
     void snakes_moved();
+    void snake_stucked(int id);
+    void snakes_collided();
 public slots:
     void move_snakes();
 

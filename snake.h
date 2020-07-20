@@ -4,16 +4,18 @@
 #include "node.h"
 #include <array>
 #include <algorithm>
-enum class SMD // Snake Movement Direction
-{
-    TAIL,
-    HEAD
-};
+
 
 class Snake
 {    
 public:
+    enum SMD // Snake Movement Direction
+    {
+        TAIL,
+        HEAD
+    };
     Snake();
+    void change_direction();
     std::vector<Node> get_snake_pos() const;
     void set_snake_pos(const std::vector<Node> &value);
     bool move(const Node &new_pos);
@@ -22,12 +24,12 @@ public:
     bool operator==(const Snake &candidate);
     bool operator!=(const Snake &candidate);
     int get_id() const;
-
+    SMD dir = HEAD;
 
 
 private:
     std::vector<Node> snake_pos;
-    SMD dir = SMD::HEAD;
+
     int id;
     static int ID;
 

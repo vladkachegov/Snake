@@ -8,6 +8,11 @@ Snake::Snake()
     ++ID;
 }
 
+void Snake::change_direction()
+{
+    dir = dir == HEAD ? TAIL : HEAD; // change movement direction to opposite
+}
+
 std::vector<Node> Snake::get_snake_pos() const
 {
     return snake_pos;
@@ -24,12 +29,8 @@ bool Snake::move(const Node &new_pos)
     {
     case (SMD::TAIL):
     {
-        snake_pos.erase(snake_pos.end());                   // remove first element. now snake is fine, but needs new tail!
+        snake_pos.erase(snake_pos.end() - 1);                   // remove first element. now snake is fine, but needs new tail!
         auto tail = new_pos;                      // prev. tail pos
-                                    // get new tail pos
-        // validate new tail pos
-
-        snake_pos.erase(snake_pos.end());                   // remove first element. now snake is fine, but needs new tail!
         snake_pos.insert(snake_pos.begin(),tail);           // add tail to snake pos
         return true;
     }

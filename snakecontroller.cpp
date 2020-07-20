@@ -17,6 +17,7 @@ void SnakeController::set_map(const ZoneMap &value)
 
 bool SnakeController::generate_snakes()
 {
+    map.clear_snakes();
     Node s_tail;
     int emergency_iterator = 0;
     std::vector<Node> generated_pos;
@@ -30,6 +31,10 @@ bool SnakeController::generate_snakes()
             s_tail = Node(x,y);      // snake tail
             generated_pos.push_back(s_tail);
         }
+        //        generated_pos.push_back(Node(10,10));
+        //        generated_pos.push_back(Node(10,50));
+        //        generated_pos.push_back(Node(90,90));
+        //        generated_pos.push_back(Node(45,45));
         bool pos_ok = validate_generated_pos(generated_pos);
         if (pos_ok)
         {
@@ -46,14 +51,14 @@ bool SnakeController::generate_snakes()
         qDebug() << emergency_iterator;
     }
 
-//    // debug only BEGIN
+    //    // debug only BEGIN
 
-//    generated_pos.clear();
-//    generated_pos.push_back(Node(0,40));
-//    generated_pos.push_back(Node(60,40));
-//    generated_pos.push_back(Node(30,10));
-//    generated_pos.push_back(Node(30,80));
-//    // debug only END
+    //    generated_pos.clear();
+    //    generated_pos.push_back(Node(0,40));
+    //    generated_pos.push_back(Node(60,40));
+    //    generated_pos.push_back(Node(30,10));
+    //    generated_pos.push_back(Node(30,80));
+    //    // debug only END
     for (int ii = 0;ii<(int)generated_pos.size();ii+=2)
     {
         auto snake = std::make_shared<Snake>();
@@ -69,14 +74,31 @@ bool SnakeController::generate_snakes()
 
 void SnakeController::move_snakes()
 {
-    for (auto snake : snakes)
+    for (auto it = snakes.begin();it<snakes.end();)
     {
-        auto dirs = map.get_neighbours(snake->get_snake_pos().back());
+        auto snake = *it;
+        std::vector<Node> dirs;
+        if (snake->dir == Snake::HEAD)
+        {
+            dirs = map.get_neighbours(snake->get_snake_pos().back(),snake);
+        }else
+        {
+            dirs = map.get_neighbours(snake->get_snake_pos().front(),snake);
+        }
+
         if (!dirs.empty())
         {
-            int d = rand() % (dirs.size()-1);
+            int d = 0;
+            if (dirs.size() != 1)
+            {
+                d = rand() % (dirs.size());
+            }
             auto dir = dirs.at(d);
             snake->move(dir);
+            ++it;
+        }else
+        {
+            snake->change_direction();
         }
     }
     emit snakes_moved();
@@ -116,6 +138,11 @@ std::vector<std::shared_ptr<Snake> > SnakeController::get_snakes() const
 void SnakeController::prepare_controller()
 {
     snakes.clear();
+}
+
+void SnakeController::refresh_map()
+{
+    map = ZoneMap(100,100);
 }
 
 SnakeController::~SnakeController()

@@ -11,10 +11,12 @@ public:
     {
 
     }
+
     bool operator==(const Node &node)
     {
         return ((x==node.x)&&(y==node.y));
     }
+
     bool is_equal_to(const Node &node) const
     {
         return ((x==node.x)&&(y==node.y));
@@ -26,6 +28,8 @@ public:
     int x = 0;
     int y = 0;
 };
+
+
 
 namespace std {
 
