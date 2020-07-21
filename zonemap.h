@@ -100,15 +100,10 @@ public:
             {
                 auto snake_pos = snake->get_snake_pos();
                 auto iter = std::find(snake_pos.begin(),snake_pos.end(),neighbour);
-                bool not_found = (iter == snake_pos.end());
-                //                for (auto it = snake_pos.begin();it < snake_pos.end();++it)
-                //                {
-                //                    if (*it == neighbour)
-                //                    {
-                //                        collides_with_snake = true;
-                //                    }
-                //                }
-                //                bool not_found = it == snake->get_snake_pos().end();
+                bool not_found = (iter == snake_pos.end()
+                                  ||
+                                  ( (iter!=snake_pos.end()) && ((*iter)!=snake->get_prev_node()) )
+                                  );
                 collides_with_snake = !not_found;
             }else
             {
@@ -129,6 +124,18 @@ public:
     {
         snakes_on_map.push_back(new_snake);
     }
+
+    void remove_snake(const int &id)
+    {
+        int snake_index = 0;
+        auto it = std::find_if(snakes_on_map.begin(),snakes_on_map.end(),[=](const std::shared_ptr<Snake> snake)
+        {
+            return (snake->get_id() == id);
+        });
+        snake_index = (it - snakes_on_map.begin()); // index is always the same in ANY vector!!!
+        snakes_on_map.erase(snakes_on_map.begin() + snake_index);
+    }
+
     void add_snakes(const std::vector<std::shared_ptr<Snake>> &new_snakes)
     {
         snakes_on_map = new_snakes;

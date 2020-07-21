@@ -11,11 +11,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&timer,&QTimer::timeout,&sc,&SnakeController::move_snakes);
     connect(&sc,&SnakeController::snakes_moved,[=]()
     {
-        int snake_number = 0;
         for (auto snake : sc.get_snakes())
         {
             int node_number = 0;
-            QVector<QGraphicsRectItem*> prev_snake_pos = rects.at(snake_number);
+            std::vector<QGraphicsRectItem*> prev_snake_pos;
+            auto it = std::find_if(rects.begin(),rects.end(),[=](const std::pair<std::vector<QGraphicsRectItem*>,int> pair)
+            {
+                return (pair.second == snake->get_id());
+            });
+            prev_snake_pos = rects.at(it - rects.begin()).first;
             for (auto pos : snake->get_snake_pos())
             {
                 auto rect = prev_snake_pos.at(node_number);
@@ -24,10 +28,15 @@ MainWindow::MainWindow(QWidget *parent)
                 rect->setPos(p1);
                 ++node_number;
             }
-            ++snake_number;
         }
     });
     connect(&sc,&SnakeController::snakes_collided,&timer,&QTimer::stop);
+    connect(&sc,&SnakeController::snake_collided,[=](const int &id)
+    {
+        sc.replace_snake(id);
+        remove_snake_rects(id);
+
+    });
     // gui setup
 
     free_brush.setColor(Qt::cyan);
@@ -76,7 +85,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_start_moving_clicked()
 {
-    timer.start(1); // snake moves every msecond
+    timer.start(500); // snake moves every msecond
 }
 
 void MainWindow::generate_maze()
@@ -118,6 +127,20 @@ void MainWindow::on_snakes_button_clicked()
 
 }
 
+void MainWindow::remove_snake_rects(const int &id)
+{
+    auto it = std::find_if(rects.begin(),rects.end(),[=](const std::pair<std::vector<QGraphicsRectItem*>,int> pair)
+    {
+        return (pair.second == id);
+    });
+    int index = it - rects.begin();
+    for (auto node : rects.at(index).first)
+    {
+        delete node;
+    }
+    rects.erase(rects.begin() + index);
+}
+
 void MainWindow::draw_objects()
 {
     foreach (auto node_vec, sc.get_map().get_grid()) {
@@ -136,7 +159,7 @@ void MainWindow::draw_objects()
     for (auto snake : snakes)
     {
         int id = snake->get_id();
-        QVector<QGraphicsRectItem *> snake_traj;
+        std::vector<QGraphicsRectItem *> snake_traj;
         for (auto node : snake->get_snake_pos())
         {
 
@@ -148,12 +171,13 @@ void MainWindow::draw_objects()
             scene->addItem(ra);
             snake_traj.push_back(ra);
         }
-        rects.push_back(snake_traj);
+
+        rects.push_back({snake_traj,id});
     }
     //highlight heads and tails
     for (auto pos : rects)
     {
-        pos.first()->setBrush(tail_brush);
-        pos.last()->setBrush(head_brush);
+        pos.first.front()->setBrush(tail_brush);
+        pos.first.back()->setBrush(head_brush);
     }
 }

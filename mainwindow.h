@@ -27,6 +27,7 @@ private slots:
 
 private:
     // gui members
+    void remove_snake_rects(const int &id);;
     void draw_objects();
     void generate_maze();
     void generate_snakes();
@@ -46,7 +47,7 @@ private:
     // model members
 
     SnakeController sc;
-    QVector<QVector<QGraphicsRectItem*>> rects;
+    std::vector<std::pair<std::vector<QGraphicsRectItem*>,int >> rects;
 
 };
 #endif // MAINWINDOW_H

@@ -17,63 +17,99 @@ void SnakeController::set_map(const ZoneMap &value)
 
 bool SnakeController::generate_snakes()
 {
+    bool success = false;
     map.clear_snakes();
-    Node s_tail;
-    int emergency_iterator = 0;
-    std::vector<Node> generated_pos;
-    while (true)
+    while (!success)
     {
-        for (int ii = 0; ii<snake_count*2;++ii)
-        {
-            // generating snake pos
-            int x = rand() % 100;     // snake tail
-            int y = rand() % 100;     // snake tail
-            s_tail = Node(x,y);      // snake tail
-            generated_pos.push_back(s_tail);
-        }
-        //        generated_pos.push_back(Node(10,10));
-        //        generated_pos.push_back(Node(10,50));
-        //        generated_pos.push_back(Node(90,90));
-        //        generated_pos.push_back(Node(45,45));
-        bool pos_ok = validate_generated_pos(generated_pos);
-        if (pos_ok)
-        {
-            break;
-        }else
-        {
-            generated_pos.clear();
-        }
-        if (emergency_iterator == 100)
-        {
-            return false;
-        }
-        ++emergency_iterator;
-        qDebug() << emergency_iterator;
-    }
+        Node s_tail;
+        int emergency_iterator = 0;
+        std::vector<Node> generated_pos;
 
-    //    // debug only BEGIN
-
-    //    generated_pos.clear();
-    //    generated_pos.push_back(Node(0,40));
-    //    generated_pos.push_back(Node(60,40));
-    //    generated_pos.push_back(Node(30,10));
-    //    generated_pos.push_back(Node(30,80));
-    //    // debug only END
-    for (int ii = 0;ii<(int)generated_pos.size();ii+=2)
-    {
-        auto snake = std::make_shared<Snake>();
-        bool path_found = false;
-        snake->set_snake_pos(Pathfinding::find_path(map,
-                                                    generated_pos.at(ii),
-                                                    generated_pos.at(ii+1),
-                                                    path_found));
-        if (path_found)
+        while (true)
         {
-            snakes.push_back(snake);
-            map.add_snake(snake);
+            for (int ii = 0; ii<snake_count*2;++ii)
+            {
+                // generating snake pos
+                int x = rand() % 100;     // snake tail
+                int y = rand() % 100;     // snake tail
+                s_tail = Node(x,y);      // snake tail
+                generated_pos.push_back(s_tail);
+            }
+            //        generated_pos.push_back(Node(10,10));
+            //        generated_pos.push_back(Node(10,50));
+            //        generated_pos.push_back(Node(90,90));
+            //        generated_pos.push_back(Node(45,45));
+            bool pos_ok = validate_generated_pos(generated_pos);
+            if (pos_ok)
+            {
+                break;
+            }else
+            {
+                generated_pos.clear();
+            }
+            if (emergency_iterator == 100)
+            {
+                return false;
+            }
+            ++emergency_iterator;
+            qDebug() << emergency_iterator;
+        }
+
+        //    // debug only BEGIN
+
+        //    generated_pos.clear();
+        //    generated_pos.push_back(Node(0,40));
+        //    generated_pos.push_back(Node(60,40));
+        //    generated_pos.push_back(Node(30,10));
+        //    generated_pos.push_back(Node(30,80));
+        //    // debug only END
+
+        //    for (int ii = 0;ii<(int)generated_pos.size();ii+=2)
+        //    {
+        //        auto snake = std::make_shared<Snake>();
+        //        bool path_found = false;
+        //        snake->set_snake_pos(Pathfinding::find_path(map,
+        //                                                    generated_pos.at(ii),
+        //                                                    generated_pos.at(ii+1),
+        //                                                    path_found));
+        //        if (path_found)
+        //        {
+        //            snakes.push_back(snake);
+        //            map.add_snake(snake);
+        //        }
+        //    }
+        //    return true;
+        for (int ii = 0;ii<(int)generated_pos.size();ii+=2)
+        {
+            auto snake = std::make_shared<Snake>();
+            bool path_found = false;
+            snake->set_snake_pos(Pathfinding::find_path(map,
+                                                        generated_pos.at(ii),
+                                                        generated_pos.at(ii+1),
+                                                        path_found));
+            if (path_found)
+            {
+                snakes.push_back(snake);
+                map.add_snake(snake);
+                success = path_found;
+            }else
+            {
+                success = path_found;
+                break;
+            }
+        }
+        if (!success)
+        {
+            snakes.clear();
+            map.clear_snakes();
         }
     }
-    return true;
+    return success;
+}
+
+void SnakeController::replace_snake(const int &id)
+{
+    remove_snake(id);
 }
 
 
@@ -103,26 +139,51 @@ void SnakeController::move_snakes()
             ++it;
         }else
         {
-            snake->change_direction();
+            snake->change_direction(); // change direction and skip this step
         }
     }
-    // check for collision
-    bool collides = false;
+    emit snakes_moved();
+    collision_check();
+
+}
+
+void SnakeController::remove_snake(const int &id)
+{
+    int snake_index = 0;
+
+    auto it = std::find_if(snakes.begin(),snakes.end(),[=](const std::shared_ptr<Snake> snake)
+    {
+        return (snake->get_id() == id);
+    });
+    snake_index = (it - snakes.begin()); // index is always the same in ANY vector!!!
+    snakes.erase(snakes.begin() + snake_index);
+    map.remove_snake(snake_index);
+}
+
+void SnakeController::collision_check()
+{
+    // check for collision between multiple snakes (if such coll. exists => no point of searching further)
     for (auto it = snakes.begin();it < (snakes.end() - 1);++it)
     {
         for (auto it2 = it+1;it2 < snakes.end(); ++it2)
         {
-            collides = (*it)->collides_with_other_snake((*it2));
+           bool snakes_coll = (*it)->collides_with_other_snake((*it2));
+           if (snakes_coll)
+           {
+               emit snakes_collided();
+               return;
+           }
         }
     }
-//    auto s1 = snakes.at(0);
-//    auto s2 = snakes.at(1);
-//    collides = s1->collides_with_other_snake(s2);
-    emit snakes_moved();
-    if (collides)
+    for (auto snake : snakes)
     {
-        emit snakes_collided();
+        if(snake->collides_with_itself())
+        {
+            emit snake_collided(snake->get_id());
+        }
     }
+
+
 }
 /** Validation of generated tails and heads.
  * If at least 2 are equal => BAD

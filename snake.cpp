@@ -63,6 +63,19 @@ bool Snake::collides_with_other_snake(std::shared_ptr<Snake> snake2)
     }
     return collides;
 }
+
+bool Snake::collides_with_itself()
+{
+    for (auto iter = snake_pos.begin();iter < snake_pos.end()-1;++iter)
+    {
+        auto it = std::find(iter+1,snake_pos.end(),*iter);
+        if (it != snake_pos.end())
+        {
+            return true;
+        }
+    }
+    return false;
+}
 /** Get potential positions of the snake*/
 std::vector<Node> Snake::potential_positions(const std::array<Node, 4> &dirs)
 {
@@ -108,6 +121,26 @@ bool Snake::operator!=(const Snake &candidate)
 int Snake::get_id() const
 {
     return id;
+}
+
+Node Snake::get_prev_node()
+{
+    switch (dir)
+    {
+    case (SMD::HEAD):
+    {
+        auto it = snake_pos.end();
+        Node prev_node = *(it -2 ); // get 1 element BEFORE HEAD
+        return (prev_node);
+    }
+    case (SMD::TAIL):
+    {
+        auto it = snake_pos.begin();
+        Node prev_node = *(it+1); // get 1 element AFTER tail
+        return (prev_node);
+    }
+
+    }
 }
 
 Snake::~Snake()
