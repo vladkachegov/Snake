@@ -16,7 +16,7 @@ public:
     Pathfinding();
     static std::vector<Node> find_path(ZoneMap &map,
                                        const Node &from,
-                                       const Node &to);
+                                       const Node &to, bool &is_founded);
     static std::vector<Node> get_path_vector(const std::unordered_map<Node,Node> &visit_log,const Node &from, const Node &to);
 };
 

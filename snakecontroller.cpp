@@ -62,11 +62,16 @@ bool SnakeController::generate_snakes()
     for (int ii = 0;ii<(int)generated_pos.size();ii+=2)
     {
         auto snake = std::make_shared<Snake>();
+        bool path_found = false;
         snake->set_snake_pos(Pathfinding::find_path(map,
                                                     generated_pos.at(ii),
-                                                    generated_pos.at(ii+1)));
-        snakes.push_back(snake);
-        map.add_snake(snake);
+                                                    generated_pos.at(ii+1),
+                                                    path_found));
+        if (path_found)
+        {
+            snakes.push_back(snake);
+            map.add_snake(snake);
+        }
     }
     return true;
 }
@@ -156,6 +161,9 @@ std::vector<std::shared_ptr<Snake> > SnakeController::get_snakes() const
 void SnakeController::prepare_controller()
 {
     snakes.clear();
+    map.clear_snakes();
+    Snake::reset_global_id();
+
 }
 
 void SnakeController::refresh_map()

@@ -16,11 +16,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    PF_EX.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    node.cpp \
+    pathfinding.cpp \
+    snake.cpp \
+    snakecontroller.cpp \
+    zonemap.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    node.h \
+    pathfinding.h \
+    snake.h \
+    snakecontroller.h \
+    zonemap.h
 
 FORMS += \
     mainwindow.ui
@@ -29,3 +40,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    task

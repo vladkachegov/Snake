@@ -5,6 +5,7 @@
 #include <array>
 #include <algorithm>
 #include <memory>
+#include <QDebug>
 
 class Snake
 {    
@@ -15,6 +16,7 @@ public:
         HEAD
     };
     Snake();
+    static void reset_global_id();
     void change_direction();
     std::vector<Node> get_snake_pos() const;
     void set_snake_pos(const std::vector<Node> &value);
@@ -26,6 +28,7 @@ public:
     bool operator!=(const Snake &candidate);
     int get_id() const;
     SMD dir = HEAD;
+    ~Snake();
 
 
 private:

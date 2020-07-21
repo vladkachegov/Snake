@@ -17,13 +17,20 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+
 private slots:
     void on_start_moving_clicked();
 
     void on_maze_button_clicked();
 
+    void on_snakes_button_clicked();
+
 private:
     // gui members
+    void draw_objects();
+    void generate_maze();
+    void generate_snakes();
+
     Ui::MainWindow *ui;
     QGraphicsScene* scene;
 
@@ -40,8 +47,6 @@ private:
 
     SnakeController sc;
     QVector<QVector<QGraphicsRectItem*>> rects;
-    void generate_snakes();
-
 
 };
 #endif // MAINWINDOW_H

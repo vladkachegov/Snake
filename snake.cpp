@@ -8,6 +8,11 @@ Snake::Snake()
     ++ID;
 }
 
+void Snake::reset_global_id()
+{
+    ID = 1;
+}
+
 void Snake::change_direction()
 {
     dir = dir == HEAD ? TAIL : HEAD; // change movement direction to opposite
@@ -103,5 +108,12 @@ bool Snake::operator!=(const Snake &candidate)
 int Snake::get_id() const
 {
     return id;
+}
+
+Snake::~Snake()
+{
+    --ID;
+    qDebug()<< "Snake is dead!";
+
 }
 

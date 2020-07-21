@@ -7,7 +7,7 @@ Pathfinding::Pathfinding()
 
 std::vector<Node> Pathfinding::find_path(ZoneMap &map,
                                          const Node &from,
-                                         const Node &to)
+                                         const Node &to, bool &is_founded)
 {
     using namespace std;
     unordered_map<Node,Node> visit_log;
@@ -26,11 +26,14 @@ std::vector<Node> Pathfinding::find_path(ZoneMap &map,
                 queue.push(n);
                 if (n == to)
                 {
+                    is_founded = true;
                     return get_path_vector(visit_log,from,to);
                 }
             }
         }
     }
+    is_founded = false;
+    return std::vector<Node>();
 }
 
 std::vector<Node> Pathfinding::get_path_vector(const std::unordered_map<Node, Node> &visit_log,

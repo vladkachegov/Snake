@@ -57,9 +57,69 @@ MainWindow::MainWindow(QWidget *parent)
     auto view = ui->view;
     scene = new QGraphicsScene;
 
-    generate_snakes();
+    generate_maze();
 
     // draw maze
+    draw_objects();
+
+//    // controller setup
+//    generate_snakes(); // generate map snakes and obstacles
+    view->setScene(scene);
+}
+
+MainWindow::~MainWindow()
+{
+
+    delete ui;
+}
+
+
+void MainWindow::on_start_moving_clicked()
+{
+    timer.start(1); // snake moves every msecond
+}
+
+void MainWindow::generate_maze()
+{
+    sc.prepare_controller();
+    sc.set_map(ZoneMap(100,100));
+    sc.generate_snakes();
+}
+void MainWindow::generate_snakes()
+{
+    sc.prepare_controller();
+    sc.generate_snakes();
+}
+
+void MainWindow::on_maze_button_clicked()
+{
+    scene->clear();
+    rects.clear();
+
+    generate_maze();
+    timer.stop();
+
+    // draw maze
+    draw_objects();
+
+
+}
+
+void MainWindow::on_snakes_button_clicked()
+{
+    scene->clear();
+    rects.clear();
+
+    generate_snakes();
+    timer.stop();
+
+    // draw maze
+    draw_objects();
+
+}
+
+void MainWindow::draw_objects()
+{
     foreach (auto node_vec, sc.get_map().get_grid()) {
         foreach (auto node, node_vec) {
             bool isObstacle = sc.get_map().is_obstacle(node,ZoneMap::OBSTACLE_ONLY);
@@ -71,7 +131,6 @@ MainWindow::MainWindow(QWidget *parent)
 
         }
     }
-
     auto snakes = sc.get_snakes();
     // draw snakes
     for (auto snake : snakes)
@@ -97,33 +156,4 @@ MainWindow::MainWindow(QWidget *parent)
         pos.first()->setBrush(tail_brush);
         pos.last()->setBrush(head_brush);
     }
-
-//    // controller setup
-//    generate_snakes(); // generate map snakes and obstacles
-    view->setScene(scene);
-}
-
-MainWindow::~MainWindow()
-{
-
-    delete ui;
-}
-
-
-void MainWindow::on_start_moving_clicked()
-{
-    timer.start(1); // snake moves every msecond
-}
-
-void MainWindow::generate_snakes()
-{
-    sc.prepare_controller();
-    sc.set_map(ZoneMap(100,100));
-    sc.generate_snakes();
-}
-
-void MainWindow::on_maze_button_clicked()
-{
-
-
 }
