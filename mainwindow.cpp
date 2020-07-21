@@ -27,13 +27,14 @@ MainWindow::MainWindow(QWidget *parent)
             ++snake_number;
         }
     });
+    connect(&sc,&SnakeController::snakes_collided,&timer,&QTimer::stop);
     // gui setup
 
     free_brush.setColor(Qt::cyan);
     free_brush.setStyle(Qt::BrushStyle::SolidPattern);
 
 
-    obstacle_brush.setColor(Qt::black);
+    obstacle_brush.setColor(Qt::darkGray);
     obstacle_brush.setStyle(Qt::BrushStyle::SolidPattern);
 
 
@@ -111,7 +112,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_start_moving_clicked()
 {
-    timer.start(1); // snake moves every second
+    timer.start(1); // snake moves every msecond
 }
 
 void MainWindow::generate_snakes()

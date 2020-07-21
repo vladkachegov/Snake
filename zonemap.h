@@ -145,7 +145,7 @@ public:
 private:
     int width = 100;
     int height = 100;
-    int number_of_obstacles = 0;
+    int number_of_obstacles = 3000;
     std::vector<std::vector<Node>> grid;
     std::vector<Node> obstacles;
     std::vector<std::shared_ptr<Snake>> snakes_on_map;

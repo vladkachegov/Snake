@@ -101,7 +101,23 @@ void SnakeController::move_snakes()
             snake->change_direction();
         }
     }
+    // check for collision
+    bool collides = false;
+    for (auto it = snakes.begin();it < (snakes.end() - 1);++it)
+    {
+        for (auto it2 = it+1;it2 < snakes.end(); ++it2)
+        {
+            collides = (*it)->collides_with_other_snake((*it2));
+        }
+    }
+//    auto s1 = snakes.at(0);
+//    auto s2 = snakes.at(1);
+//    collides = s1->collides_with_other_snake(s2);
     emit snakes_moved();
+    if (collides)
+    {
+        emit snakes_collided();
+    }
 }
 /** Validation of generated tails and heads.
  * If at least 2 are equal => BAD
@@ -134,6 +150,8 @@ std::vector<std::shared_ptr<Snake> > SnakeController::get_snakes() const
 {
     return snakes;
 }
+
+
 
 void SnakeController::prepare_controller()
 {

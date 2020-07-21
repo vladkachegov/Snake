@@ -43,6 +43,21 @@ bool Snake::move(const Node &new_pos)
     }
     }
 }
+
+bool Snake::collides_with_other_snake(std::shared_ptr<Snake> snake2)
+{
+    bool collides = false;
+    for (auto node : snake2->get_snake_pos())
+    {
+        auto it = std::find(snake_pos.begin(),snake_pos.end(),node);
+        if (it != snake_pos.end())
+        {
+            collides = true;
+            break;
+        }
+    }
+    return collides;
+}
 /** Get potential positions of the snake*/
 std::vector<Node> Snake::potential_positions(const std::array<Node, 4> &dirs)
 {
