@@ -16,14 +16,19 @@ public:
 
     ZoneMap get_map() const;
     void set_map(const ZoneMap &value);
+    /** Generate 2 snakes. Snake::ID must be reset before func. call*/
     bool generate_snakes();
+    /** Generate snake with same id, as her dead parent*/
+    bool generate_snake(const int &id);
     void replace_snake(const int &id);
     std::vector<std::shared_ptr<Snake> > get_snakes() const;
+    /** Reset controller to original state and keep map */
     void prepare_controller();
     void refresh_map();
     ~SnakeController();
 signals:
     void snakes_moved();
+    void snake_new_pos_validated();
     void snake_stucked(int id);
     void snakes_collided();
     void snake_collided(int id);
@@ -40,6 +45,7 @@ private:
 //    Snake snake3;
 
 
+    bool validate_gp(const Node &node);
 };
 
 #endif // SNAKECONTROLLER_H

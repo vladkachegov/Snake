@@ -16,20 +16,29 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
-
+public slots:
+    void clear_collided_snakes();
 private slots:
+    /** Start timer*/
     void on_start_moving_clicked();
-
+    /** Create new maze and snakes*/
     void on_maze_button_clicked();
-
-    void on_snakes_button_clicked();
+    /** Export maze and snake to sqlite*/
+    void on_export_button_clicked();
 
 private:
     // gui members
-    void remove_snake_rects(const int &id);;
+    /** Draw single new snake in scene*/
+    void draw_new_snake(const int &id = 0);
+    /** Draw new map in scene*/
+    void draw_map();
+    /** Remove deleted snake rects from scene*/
+    void remove_snake_rects(const int &id);
+    /** Draw maze + both snakes (used on init.)*/
     void draw_objects();
+    /** Tells controller to generate new maze + snakes*/
     void generate_maze();
+   /** Tells controller to generate new snakes in the same maze*/
     void generate_snakes();
 
     Ui::MainWindow *ui;
@@ -44,10 +53,12 @@ private:
     int node_size = 8;
 
     QTimer timer;
+    int timer_tick = 100;
     // model members
 
     SnakeController sc;
     std::vector<std::pair<std::vector<QGraphicsRectItem*>,int >> rects;
+    std::vector<int> collided_snakes_id;
 
 };
 #endif // MAINWINDOW_H

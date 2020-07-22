@@ -145,8 +145,13 @@ Node Snake::get_prev_node()
 
 Snake::~Snake()
 {
-    --ID;
+//    --ID;
     qDebug()<< "Snake is dead!";
 
+}
+
+void Snake::set_id(int value)
+{
+    id = value;
 }
 

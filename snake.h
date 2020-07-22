@@ -33,6 +33,8 @@ public:
     ~Snake();
 
 
+    void set_id(int value);
+
 private:
     std::vector<Node> snake_pos;
 

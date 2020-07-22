@@ -29,12 +29,12 @@
      <rect>
       <x>930</x>
       <y>10</y>
-      <width>111</width>
+      <width>141</width>
       <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>start_moving</string>
+     <string>Начать движение</string>
     </property>
    </widget>
    <widget class="QPushButton" name="maze_button">
@@ -42,25 +42,25 @@
      <rect>
       <x>930</x>
       <y>40</y>
-      <width>111</width>
+      <width>141</width>
       <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>new maze</string>
+     <string>Новый лабиринт</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="snakes_button">
+   <widget class="QPushButton" name="export_button">
     <property name="geometry">
      <rect>
       <x>930</x>
       <y>70</y>
-      <width>111</width>
+      <width>141</width>
       <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>new_snakes</string>
+     <string>ЭКСПОРТ</string>
     </property>
    </widget>
   </widget>
