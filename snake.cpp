@@ -76,7 +76,7 @@ bool Snake::collides_with_itself()
     }
     return false;
 }
-/** Get potential positions of the snake*/
+
 std::vector<Node> Snake::potential_positions(const std::array<Node, 4> &dirs)
 {
     std::vector<Node> pot_pos;

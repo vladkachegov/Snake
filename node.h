@@ -2,7 +2,7 @@
 #define NODE_H
 #include <cstdlib>
 #include <functional>
-
+/** Node, part of grid map*/
 class Node
 {
 public:
