@@ -49,32 +49,30 @@ bool Snake::move(const Node &new_pos)
     }
 }
 
-bool Snake::collides_with_other_snake(std::shared_ptr<Snake> snake2)
+void Snake::collides_with_other_snake(std::shared_ptr<Snake> snake2)
 {
-    bool collides = false;
     for (auto node : snake2->get_snake_pos())
     {
         auto it = std::find(snake_pos.begin(),snake_pos.end(),node);
         if (it != snake_pos.end())
         {
-            collides = true;
+            status = SnakeStatus::COLLIDED;
+            snake2->set_collided();
             break;
         }
     }
-    return collides;
 }
 
-bool Snake::collides_with_itself()
+void Snake::collides_with_itself()
 {
     for (auto iter = snake_pos.begin();iter < snake_pos.end()-1;++iter)
     {
         auto it = std::find(iter+1,snake_pos.end(),*iter);
         if (it != snake_pos.end())
         {
-            return true;
+            status = SnakeStatus::COLLIDED;
         }
     }
-    return false;
 }
 
 std::vector<Node> Snake::potential_positions(const std::array<Node, 4> &dirs)
@@ -106,6 +104,11 @@ std::vector<Node> Snake::potential_positions(const std::array<Node, 4> &dirs)
         }
     }
     return pot_pos;
+}
+
+void Snake::set_collided()
+{
+    status = SnakeStatus::COLLIDED;
 }
 
 bool Snake::operator==(const Snake &candidate)
@@ -153,5 +156,10 @@ Snake::~Snake()
 void Snake::set_id(int value)
 {
     id = value;
+}
+
+Snake::SnakeStatus Snake::get_status() const
+{
+    return status;
 }
 

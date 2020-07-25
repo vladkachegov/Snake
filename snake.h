@@ -16,6 +16,16 @@ public:
         TAIL,
         HEAD
     };
+    /** Snake status enum
+        OK => good to go
+        COLLIDED => IS DEAD
+    */
+    enum SnakeStatus
+    {
+        OK,
+        COLLIDED
+    };
+
     Snake();
     /** Reset global snake id in case of new maze*/
     static void reset_global_id();
@@ -27,27 +37,28 @@ public:
     void set_snake_pos(const std::vector<Node> &value);
     /** Move snake to new pos*/
     bool move(const Node &new_pos);
-    /** Check if snake has collided with other snake*/
-    bool collides_with_other_snake(std::shared_ptr<Snake> snake2);
-    /** Check if snake has collided with itself*/
-    bool collides_with_itself();
+    /** Check if snake has collided with other snake and change their status*/
+    void collides_with_other_snake(std::shared_ptr<Snake> snake2);
+    /** Check if snake has collided with itself and change status*/
+    void collides_with_itself();
     /** Get ALL positions snake could take on this step*/
     std::vector<Node> potential_positions(const std::array<Node,4> &dirs);
+    /** Mark current snake as collided*/
+    void set_collided();
     //operators
     bool operator==(const Snake &candidate);
     bool operator!=(const Snake &candidate);
     int get_id() const;
     /** Get position 1 BEFORE current movement direction*/
     Node get_prev_node();
-    SMD dir = HEAD;
+    SMD dir = SMD::HEAD;
     ~Snake();
-
-
     void set_id(int value);
+    SnakeStatus get_status() const;
 
 private:
     std::vector<Node> snake_pos;
-
+    SnakeStatus status = SnakeStatus::OK;
     int id;
     static int ID;
 

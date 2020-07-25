@@ -24,22 +24,14 @@ MainWindow::MainWindow(QWidget *parent)
             int node_number = 0;
             for (auto pos : snake->get_snake_pos())
             {
-                auto rect = prev_snake_pos.at(node_number);                
+                auto rect = prev_snake_pos.at(node_number);
                 auto p1 = (QPointF(pos.x*node_size, pos.y*node_size));
                 rect->setPos(p1);
                 ++node_number;
             }
         }
     });
-    connect(&sc,&SnakeController::snakes_collided,
-            this,&MainWindow::generate_snakes);
-    connect(&sc,&SnakeController::snake_collided,[=](const int &id)
-    {
-        collided_snakes_id.push_back(id);
-    });
-    connect(&sc,&SnakeController::snake_new_pos_validated,
-            this,
-            &MainWindow::clear_collided_snakes);
+
     // gui setup
 
     free_brush.setColor(Qt::cyan);
@@ -100,7 +92,7 @@ void MainWindow::generate_maze()
 
 void MainWindow::generate_snakes()
 {
-//    timer.stop();
+    //    timer.stop();
     for (auto snake : sc.get_snakes())
     {
         remove_snake_rects(snake->get_id());

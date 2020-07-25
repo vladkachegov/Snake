@@ -4,12 +4,11 @@
 #include <memory>
 #include <QDebug>
 #include <QObject>
-
 #include "pathfinding.h"
 #include "snake.h"
 
 class SnakeController : public QObject
-{
+{    
     Q_OBJECT
 public:
     explicit SnakeController(QObject *parent = nullptr);
@@ -18,8 +17,7 @@ public:
     void set_map(const ZoneMap &value);
     /** Generate 2 snakes. Snake::ID must be reset before func. call*/
     bool generate_snakes();
-    /** Generate snake with same id, as her dead parent*/
-    bool generate_snake(const int &id);
+    /** Replace collided snake with the new one and keep the same snake id. */
     void replace_snake(const int &id);
     std::vector<std::shared_ptr<Snake> > get_snakes() const;
     /** Reset controller to original state and keep map */
@@ -27,16 +25,17 @@ public:
     void refresh_map();
     ~SnakeController();
 signals:
+    /** Notify view when all snakes were moved */
     void snakes_moved();
-    /** signal to delete snakes, collided with itself */
-    void snake_new_pos_validated();
-    void snake_stucked(int id);
-    void snakes_collided();
-    void snake_collided(int id);
 public slots:
+    /** Move snakes as view demands it*/
     void move_snakes();
 
 private:
+    /** Mark snake as "COLLIDED" to delete later*/
+    void add_to_collided(const int &id);
+    /** Generate snake with same id, as her dead parent*/
+    bool generate_snake(const int &id);
     /** Remove snake from controller and from map). */
     void remove_snake(const int &id);
     /** Check snakes for any kind of collision */
@@ -49,10 +48,8 @@ private:
     bool validate_generated_pos(const std::vector<Node> &tails_and_heads);
     ZoneMap map;
     std::vector<std::shared_ptr<Snake>> snakes;
-    int snake_count = 1;
-    //    Snake snake3;
-
-
+    int snake_count = 1;    
+    std::vector<int> collided_snakes;
     bool validate_gp(const Node &node);
 };
 

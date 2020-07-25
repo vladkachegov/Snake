@@ -119,7 +119,7 @@ bool SnakeController::generate_snake(const int &id)
         }
     }
 }
-/** Replace collided snake with the new one and keep the same snake id. */
+
 void SnakeController::replace_snake(const int &id)
 {
     remove_snake(id);           // delete old snake from everywhere
@@ -170,37 +170,34 @@ void SnakeController::move_snakes()
             snake->change_direction(); // change direction and skip this step
         }
     }
-    emit snakes_moved();    
     collision_check();
-    emit snake_new_pos_validated(); // signal to delete snakes, collided with itself
+    emit snakes_moved();
+}
+
+void SnakeController::add_to_collided(const int &id)
+{
 
 }
 
 void SnakeController::collision_check()
 {
-    // check for collision between multiple snakes (if such coll. exists => no point of searching further)
+    // check for collision between multiple snakes
     for (auto it = snakes.begin();it < (snakes.end() - 1);++it)
     {
         for (auto it2 = it+1;it2 < snakes.end(); ++it2)
         {
-            bool snakes_coll = (*it)->collides_with_other_snake((*it2));
-            if (snakes_coll)
-            {
-                emit snakes_collided();
-                return;
-            }
+            (*it)->collides_with_other_snake((*it2));
         }
     }
     // check for collision in single snake (if such coll. exists => send snake id to view)
     for (auto snake : snakes)
     {
-        if(snake->collides_with_itself())
+        if(snake->get_status() != Snake::SnakeStatus::COLLIDED)
         {
-            emit snake_collided(snake->get_id());
+            snake->collides_with_itself();
         }
     }
-
-
+    // at this moment all the snakes were checked and have appropriate
 }
 
 bool SnakeController::validate_generated_pos(const std::vector<Node> &tails_and_heads)
