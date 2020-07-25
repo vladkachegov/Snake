@@ -13,20 +13,18 @@ MainWindow::MainWindow(QWidget *parent)
     {
         for (auto snake : sc.get_snakes())
         {
-
-            std::vector<QGraphicsRectItem*> prev_snake_pos;
             auto it = std::find_if(rects.begin(),rects.end(),[=](const std::pair<std::vector<QGraphicsRectItem*>,int> pair)
             {
                 return (pair.second == snake->get_id());
             });
 
             int index = it - rects.begin();
+            std::vector<QGraphicsRectItem*> prev_snake_pos;
             prev_snake_pos = rects.at(index).first;
             int node_number = 0;
             for (auto pos : snake->get_snake_pos())
             {
-                auto rect = prev_snake_pos.at(node_number);
-                auto p = rect->pos();
+                auto rect = prev_snake_pos.at(node_number);                
                 auto p1 = (QPointF(pos.x*node_size, pos.y*node_size));
                 rect->setPos(p1);
                 ++node_number;

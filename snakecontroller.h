@@ -28,6 +28,7 @@ public:
     ~SnakeController();
 signals:
     void snakes_moved();
+    /** signal to delete snakes, collided with itself */
     void snake_new_pos_validated();
     void snake_stucked(int id);
     void snakes_collided();
@@ -48,8 +49,8 @@ private:
     bool validate_generated_pos(const std::vector<Node> &tails_and_heads);
     ZoneMap map;
     std::vector<std::shared_ptr<Snake>> snakes;
-    int snake_count = 2;
-//    Snake snake3;
+    int snake_count = 1;
+    //    Snake snake3;
 
 
     bool validate_gp(const Node &node);

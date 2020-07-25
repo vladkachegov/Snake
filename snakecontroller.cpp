@@ -1,5 +1,5 @@
 #include "snakecontroller.h"
-
+#include <QThread>
 SnakeController::SnakeController(QObject *parent) : QObject(parent)
 {
 
@@ -170,9 +170,9 @@ void SnakeController::move_snakes()
             snake->change_direction(); // change direction and skip this step
         }
     }
-    emit snakes_moved();
-//    collision_check();
-//    emit snake_new_pos_validated();
+    emit snakes_moved();    
+    collision_check();
+    emit snake_new_pos_validated(); // signal to delete snakes, collided with itself
 
 }
 
