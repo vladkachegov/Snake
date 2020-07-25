@@ -100,10 +100,11 @@ public:
             {
                 auto snake_pos = snake->get_snake_pos();
                 auto iter = std::find(snake_pos.begin(),snake_pos.end(),neighbour);
+                // we can go to new pos only if it is NOT PREVIOUS POSITION!
                 bool not_found = (iter == snake_pos.end()
                                   ||
                                   ( (iter!=snake_pos.end()) && ((*iter)!=snake->get_prev_node()) )
-                                  );
+                                  ); // check new pos to be anything but previous position
                 collides_with_snake = !not_found;
             }else
             {

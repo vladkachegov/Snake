@@ -36,8 +36,15 @@ public slots:
     void move_snakes();
 
 private:
+    /** Remove snake from controller and from map). */
     void remove_snake(const int &id);
+    /** Check snakes for any kind of collision */
     void collision_check();
+    /** Validation of generated tails and heads.
+     * If at least 2 are equal => BAD
+        If any is an obstacle => BAD
+        Else ==> GOOD
+    */
     bool validate_generated_pos(const std::vector<Node> &tails_and_heads);
     ZoneMap map;
     std::vector<std::shared_ptr<Snake>> snakes;

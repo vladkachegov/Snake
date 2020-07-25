@@ -126,7 +126,7 @@ void SnakeController::replace_snake(const int &id)
     generate_snake(id);         // create new one in new place
 
 }
-/** Remove snake from controller and from map). */
+
 void SnakeController::remove_snake(const int &id)
 {
     int snake_index = 0;
@@ -171,8 +171,8 @@ void SnakeController::move_snakes()
         }
     }
     emit snakes_moved();
-    collision_check();
-    emit snake_new_pos_validated();
+//    collision_check();
+//    emit snake_new_pos_validated();
 
 }
 
@@ -191,6 +191,7 @@ void SnakeController::collision_check()
             }
         }
     }
+    // check for collision in single snake (if such coll. exists => send snake id to view)
     for (auto snake : snakes)
     {
         if(snake->collides_with_itself())
@@ -201,11 +202,7 @@ void SnakeController::collision_check()
 
 
 }
-/** Validation of generated tails and heads.
- * If at least 2 are equal => BAD
-    If any is an obstacle => BAD
-    Else ==> GOOD
-*/
+
 bool SnakeController::validate_generated_pos(const std::vector<Node> &tails_and_heads)
 {
     // check for equality
