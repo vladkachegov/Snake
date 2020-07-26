@@ -18,6 +18,8 @@ public:
     ~MainWindow();
 public slots:
     void clear_collided_snakes();
+    /** Update snake representation with given id*/
+    void update_snakes(int id);
 private slots:
     /** Start timer*/
     void on_start_moving_clicked();
@@ -53,7 +55,7 @@ private:
     int node_size = 8;
 
     QTimer timer;
-    int timer_tick = 100;
+    int timer_tick = 500;
     // model members
 
     SnakeController sc;

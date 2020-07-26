@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
             }
         }
     });
-
+    connect(&sc, &SnakeController::snake_replaced, this, &MainWindow::update_snakes);
     // gui setup
 
     free_brush.setColor(Qt::cyan);
@@ -132,6 +132,13 @@ void MainWindow::clear_collided_snakes()
     }
 }
 
+void MainWindow::update_snakes(int id)
+{
+    qDebug() << "SNAKE UPDATE SIGNAL CAUGHT!";
+    remove_snake_rects(id);
+    draw_new_snake(id);
+}
+
 
 void MainWindow::remove_snake_rects(const int &id)
 {
@@ -140,6 +147,7 @@ void MainWindow::remove_snake_rects(const int &id)
         return (pair.second == id);
     });
     int index = it - rects.begin();
+    // delete all pointers and erase vector element
     for (auto node : rects.at(index).first)
     {
         delete node;

@@ -27,15 +27,19 @@ public:
 signals:
     /** Notify view when all snakes were moved */
     void snakes_moved();
+    /** Notify view when snake was replaced */
+    void snake_replaced(int id);
 public slots:
     /** Move snakes as view demands it*/
     void move_snakes();
 
 private:
+    /** Preparing model for next move (replacing collided snakes)*/
+    void prepare_for_next_move();
     /** Mark snake as "COLLIDED" to delete later*/
     void add_to_collided(const int &id);
     /** Generate snake with same id, as her dead parent*/
-    bool generate_snake(const int &id);
+    void generate_snake(const int &id);
     /** Remove snake from controller and from map). */
     void remove_snake(const int &id);
     /** Check snakes for any kind of collision */
@@ -48,8 +52,8 @@ private:
     bool validate_generated_pos(const std::vector<Node> &tails_and_heads);
     ZoneMap map;
     std::vector<std::shared_ptr<Snake>> snakes;
-    int snake_count = 1;    
-    std::vector<int> collided_snakes;
+    int snake_count = 2;
+    /** DEL!*/
     bool validate_gp(const Node &node);
 };
 

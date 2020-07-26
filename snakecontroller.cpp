@@ -78,7 +78,7 @@ bool SnakeController::generate_snakes()
     return success;
 }
 
-bool SnakeController::generate_snake(const int &id)
+void SnakeController::generate_snake(const int &id)
 {
     bool success = false;
     while (!success)
@@ -124,7 +124,7 @@ void SnakeController::replace_snake(const int &id)
 {
     remove_snake(id);           // delete old snake from everywhere
     generate_snake(id);         // create new one in new place
-
+    emit snake_replaced(id);
 }
 
 void SnakeController::remove_snake(const int &id)
@@ -143,6 +143,7 @@ void SnakeController::remove_snake(const int &id)
 
 void SnakeController::move_snakes()
 {
+    prepare_for_next_move();
     for (auto it = snakes.begin();it<snakes.end();)
     {
         auto snake = *it;
@@ -169,9 +170,25 @@ void SnakeController::move_snakes()
         {
             snake->change_direction(); // change direction and skip this step
         }
-    }
+    }    
     collision_check();
     emit snakes_moved();
+}
+
+void SnakeController::prepare_for_next_move()
+{
+    std::vector<int> collided_snakes;
+    for (auto s : snakes)
+    {
+        if (s->get_status() == Snake::SnakeStatus::COLLIDED)
+        {
+            collided_snakes.push_back(s->get_id());
+        }
+    }
+    for (auto id : collided_snakes)
+    {
+        replace_snake(id);
+    }
 }
 
 void SnakeController::add_to_collided(const int &id)
