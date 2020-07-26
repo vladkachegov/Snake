@@ -22,8 +22,9 @@ public:
     */
     enum SnakeStatus
     {
-        OK,
-        COLLIDED
+        OK,         // snake is good to go
+        COLLIDED,   // snake has collided
+        FRESH       // snake was just created and skips turn
     };
 
     Snake();
@@ -45,6 +46,8 @@ public:
     std::vector<Node> potential_positions(const std::array<Node,4> &dirs);
     /** Mark current snake as collided*/
     void set_collided();
+    /** Mark current snake as good to go*/
+    void set_ok();
     //operators
     bool operator==(const Snake &candidate);
     bool operator!=(const Snake &candidate);
@@ -58,7 +61,7 @@ public:
 
 private:
     std::vector<Node> snake_pos;
-    SnakeStatus status = SnakeStatus::OK;
+    SnakeStatus status = SnakeStatus::FRESH;
     int id;
     static int ID;
 

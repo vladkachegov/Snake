@@ -55,7 +55,7 @@ private:
     int node_size = 8;
 
     QTimer timer;
-    int timer_tick = 500;
+    int timer_tick = 1000;
     // model members
 
     SnakeController sc;

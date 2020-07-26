@@ -111,6 +111,11 @@ void Snake::set_collided()
     status = SnakeStatus::COLLIDED;
 }
 
+void Snake::set_ok()
+{
+    status = SnakeStatus::OK;
+}
+
 bool Snake::operator==(const Snake &candidate)
 {
     return (this->id == candidate.id);

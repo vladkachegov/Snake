@@ -36,8 +36,7 @@ public slots:
 private:
     /** Preparing model for next move (replacing collided snakes)*/
     void prepare_for_next_move();
-    /** Mark snake as "COLLIDED" to delete later*/
-    void add_to_collided(const int &id);
+
     /** Generate snake with same id, as her dead parent*/
     void generate_snake(const int &id);
     /** Remove snake from controller and from map). */
@@ -53,8 +52,7 @@ private:
     ZoneMap map;
     std::vector<std::shared_ptr<Snake>> snakes;
     int snake_count = 2;
-    /** DEL!*/
-    bool validate_gp(const Node &node);
+
 };
 
 #endif // SNAKECONTROLLER_H
