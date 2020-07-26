@@ -2,7 +2,9 @@
 #include <QThread>
 SnakeController::SnakeController(QObject *parent) : QObject(parent)
 {
-
+    connect(&save_thread, &QThread::started, &sa, &SqlAdapter::run);
+    connect(&sa, &SqlAdapter::finished, &save_thread, &QThread::quit);
+    sa.moveToThread(&save_thread);
 }
 
 ZoneMap SnakeController::get_map() const
@@ -126,6 +128,13 @@ void SnakeController::move_snakes()
     }
     collision_check(); // check snakes for collision
     emit snakes_moved();
+}
+
+void SnakeController::save_to_sqlite()
+{
+    sa.prepare_entities(map,snakes);
+    save_thread.start();
+    qDebug() << "saving";
 }
 
 void SnakeController::prepare_for_next_move()

@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    ui->setupUi(this);
     connect(&timer,&QTimer::timeout,&sc,&SnakeController::move_snakes);
     connect(&sc,&SnakeController::snakes_moved,[=]()
     {
@@ -33,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent)
         }
     });
     connect(&sc, &SnakeController::snake_replaced, this, &MainWindow::update_snakes);
+    connect(ui->eb, &QPushButton::clicked, &sc, &SnakeController::save_to_sqlite);
     // gui setup
 
     free_brush.setColor(Qt::cyan);
@@ -58,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     node_size = 8;  // single node size
 
-    ui->setupUi(this);
+
     auto view = ui->view;
     scene = new QGraphicsScene;
 
@@ -191,7 +193,3 @@ void MainWindow::draw_objects()
     }
 }
 
-void MainWindow::on_export_button_clicked()
-{
-
-}

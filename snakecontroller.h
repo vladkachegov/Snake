@@ -6,7 +6,8 @@
 #include <QObject>
 #include "pathfinding.h"
 #include "snake.h"
-
+#include "sqladapter.h"
+#include <QThread>
 class SnakeController : public QObject
 {    
     Q_OBJECT
@@ -32,7 +33,8 @@ signals:
 public slots:
     /** Move snakes as view demands it*/
     void move_snakes();
-
+    /** Save snakes to sqlite as view demands it*/
+    void save_to_sqlite();
 private:
     /** Preparing model for next move (replacing collided snakes)*/
     void prepare_for_next_move();
@@ -52,8 +54,9 @@ private:
     ZoneMap map;
     std::vector<std::shared_ptr<Snake>> snakes;
     int snake_count = 1;
-
+    SqlAdapter sa;
     bool vgp(const std::pair<Node, Node> &tail_and_head);
+    QThread save_thread;
 };
 
 #endif // SNAKECONTROLLER_H

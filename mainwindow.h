@@ -24,9 +24,6 @@ private slots:
     void on_start_moving_clicked();
     /** Create new maze and snakes*/
     void on_maze_button_clicked();
-    /** Export maze and snake to sqlite*/
-    void on_export_button_clicked();
-
 private:
     // gui members
     /** Draw single new snake in scene*/

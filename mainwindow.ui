@@ -50,7 +50,7 @@
      <string>Новый лабиринт</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="export_button">
+   <widget class="QPushButton" name="eb">
     <property name="geometry">
      <rect>
       <x>930</x>
