@@ -53,7 +53,7 @@ private:
     bool validate_generated_pos(const std::vector<Node> &tails_and_heads);
     ZoneMap map;
     std::vector<std::shared_ptr<Snake>> snakes;
-    int snake_count = 1;
+    int snake_count = 2;
     SqlAdapter sa;
     bool vgp(const std::pair<Node, Node> &tail_and_head);
     QThread save_thread;

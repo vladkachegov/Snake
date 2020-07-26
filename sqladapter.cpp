@@ -1,5 +1,5 @@
 #include "sqladapter.h"
-int SqlAdapter::save_id = 1;
+
 SqlAdapter::SqlAdapter(QObject *parent) : QObject(parent)
 {
 
@@ -14,9 +14,18 @@ void SqlAdapter::prepare_entities(const ZoneMap &map, const std::vector<std::sha
 void SqlAdapter::run()
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("/home/brslv4/Desktop/Advent_Test_Task/SnakeProject/SnakeDb.db");
+    db.setDatabaseName(QDir::currentPath() + "//SnakeDb.db");
     auto connection_name = db.connectionName();
     db.open();
+    Q_FOREACH(auto node,map.get_obstacles())
+    {
+        QSqlQuery sql_query;
+        sql_query.prepare(insert_map_query);
+        sql_query.bindValue(0,save_id);
+        sql_query.bindValue(1,node.x);
+        sql_query.bindValue(2,node.y);
+        sql_query.exec();
+    }
 
     Q_FOREACH(auto snake,snakes)
     {

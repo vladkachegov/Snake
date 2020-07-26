@@ -51,7 +51,7 @@ private:
     int node_size = 8;
 
     QTimer timer;
-    int timer_tick = 100;
+    int timer_tick = 1000;
     // model members
     SnakeController sc;
     std::vector<std::pair<std::vector<QGraphicsRectItem*>,int >> rects;

@@ -8,6 +8,7 @@
 #include <QSqlQuery>
 #include <QDebug>
 #include <QSqlError>
+#include <QDir>
 class SqlAdapter : public QObject
 {
     Q_OBJECT
@@ -19,7 +20,7 @@ public slots:
 signals:
     void finished();
 private:
-    static int save_id;
+    int save_id = 1;
     ZoneMap map;
     std::vector<std::shared_ptr<Snake>> snakes;
     const QString insert_snake_query = "INSERT INTO Snakes (snake_id,map_id,pos_x,pos_y)"
