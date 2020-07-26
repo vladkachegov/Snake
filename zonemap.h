@@ -47,19 +47,12 @@ public:
         obstacles = new_obstacles;
     }
 
-    /** Check the node to be an obstacle.
-     * If snake arg passed - check for collisions with other snakes too
-        returns true is the node is an obstacle*/
-    bool is_obstacle(const Node &node,OBSTACLE_CHECK_MODE mode = OBSTACLE_PLUS_SNAKES)
+    /** Check the node to be an obstacle.*/
+    bool is_obstacle(const Node &node)
     {
         auto obstacle_it = std::find(obstacles.begin(),obstacles.end(),node);
-        bool isObstacle = !(obstacle_it == obstacles.end());                    // check obstacles
-        //        bool collidesWithOtherSnake = false;
-        //        if (mode == OBSTACLE_PLUS_SNAKES)
-        //        {
-        //              collidesWithOtherSnake = collides_with_snakes(node);
-        //        }
-        if (isObstacle /*|| collidesWithOtherSnake*/)
+        bool isObstacle = !(obstacle_it == obstacles.end());
+        if (isObstacle)
         {
             return true;
         }else
@@ -98,6 +91,7 @@ public:
             bool collides_with_snake = false;
             if (snake != nullptr)
             {
+                // check for snake move
                 auto snake_pos = snake->get_snake_pos();
                 auto iter = std::find(snake_pos.begin(),snake_pos.end(),neighbour);
                 // we can go to new pos only if it is NOT PREVIOUS POSITION!
@@ -107,7 +101,7 @@ public:
                                   ); // check new pos to be anything but previous position
                 collides_with_snake = !not_found;
             }else
-            {
+            {   // check for pathfinding
                 collides_with_snake = collides_with_snakes(node);
             }
             bool obstacle = is_obstacle(neighbour); // is obstacle
@@ -128,12 +122,11 @@ public:
 
     void remove_snake(const int &id)
     {
-        int snake_index = 0;
         auto it = std::find_if(snakes_on_map.begin(),snakes_on_map.end(),[=](const std::shared_ptr<Snake> snake)
         {
             return (snake->get_id() == id);
         });
-        snake_index = (it - snakes_on_map.begin()); // index is always the same in ANY vector!!!
+        int snake_index = (it - snakes_on_map.begin()); // index is always the same in ANY vector!!!
         snakes_on_map.erase(snakes_on_map.begin() + snake_index);
     }
 
@@ -153,7 +146,7 @@ public:
 private:
     int width = 100;
     int height = 100;
-    int number_of_obstacles = 1500;
+    int number_of_obstacles = 3700;
     std::vector<std::vector<Node>> grid;
     std::vector<Node> obstacles;
     std::vector<std::shared_ptr<Snake>> snakes_on_map;

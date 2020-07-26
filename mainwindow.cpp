@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&timer,&QTimer::timeout,&sc,&SnakeController::move_snakes);
     connect(&sc,&SnakeController::snakes_moved,[=]()
     {
+        qDebug() << "snakes moved signal";
         for (auto snake : sc.get_snakes())
         {
             auto it = std::find_if(rects.begin(),rects.end(),[=](const std::pair<std::vector<QGraphicsRectItem*>,int> pair)
@@ -118,25 +119,12 @@ void MainWindow::on_maze_button_clicked()
 
 }
 
-void MainWindow::clear_collided_snakes()
-{
-    if (!collided_snakes_id.empty())
-    {
-        for (auto snake_id : collided_snakes_id)
-        {
-            remove_snake_rects(snake_id);   // delete prev. rects
-            sc.replace_snake(snake_id);     // generate new snake with same id
-            draw_new_snake(snake_id);       // draw new rects
-        }
-        collided_snakes_id.clear();
-    }
-}
-
 void MainWindow::update_snakes(int id)
 {
     qDebug() << "SNAKE UPDATE SIGNAL CAUGHT!";
     remove_snake_rects(id);
     draw_new_snake(id);
+    qDebug() << "SNAKE REFRESHED";
 }
 
 
@@ -184,7 +172,7 @@ void MainWindow::draw_map()
 {
     foreach (auto node_vec, sc.get_map().get_grid()) {
         foreach (auto node, node_vec) {
-            bool isObstacle = sc.get_map().is_obstacle(node,ZoneMap::OBSTACLE_ONLY);
+            bool isObstacle = sc.get_map().is_obstacle(node);
             QBrush brush = isObstacle ? obstacle_brush : free_brush;
             auto rect = scene->addRect(node.x*node_size,node.y*node_size,
                                        node_size,node_size,

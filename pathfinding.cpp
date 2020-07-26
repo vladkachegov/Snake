@@ -6,9 +6,11 @@ Pathfinding::Pathfinding()
 }
 
 std::vector<Node> Pathfinding::find_path(ZoneMap &map,
-                                         const Node &from,
-                                         const Node &to, bool &is_founded)
+                                         std::pair<Node,Node> limbs,
+                                         bool &is_founded)
 {
+    Node from = limbs.first;
+    Node to = limbs.second;
     using namespace std;
     unordered_map<Node,Node> visit_log;
     queue<Node> queue;

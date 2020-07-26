@@ -6,6 +6,7 @@ Snake::Snake()
 {
     id = ID;
     ++ID;
+    qDebug() << "Snake created";
 }
 
 void Snake::reset_global_id()

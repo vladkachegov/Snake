@@ -16,8 +16,8 @@ public:
     Pathfinding();
     /** Find path from 1st to the dist node*/
     static std::vector<Node> find_path(ZoneMap &map,
-                                       const Node &from,
-                                       const Node &to, bool &is_founded);
+                                       std::pair<Node, Node> limbs,
+                                       bool &is_founded);
 private:
     /** Convert parsed map to the path vector*/
     static std::vector<Node> get_path_vector(const std::unordered_map<Node,Node> &visit_log,const Node &from, const Node &to);

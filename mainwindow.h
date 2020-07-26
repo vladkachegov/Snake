@@ -17,7 +17,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 public slots:
-    void clear_collided_snakes();
     /** Update snake representation with given id*/
     void update_snakes(int id);
 private slots:
@@ -55,12 +54,11 @@ private:
     int node_size = 8;
 
     QTimer timer;
-    int timer_tick = 1000;
+    int timer_tick = 100;
     // model members
-
     SnakeController sc;
     std::vector<std::pair<std::vector<QGraphicsRectItem*>,int >> rects;
-    std::vector<int> collided_snakes_id;
+
 
 };
 #endif // MAINWINDOW_H
