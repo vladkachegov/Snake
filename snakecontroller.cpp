@@ -21,7 +21,7 @@ bool SnakeController::generate_snakes()
     map.clear_snakes();
     while (!success)
     {
-        Node s_tail;
+        Node snake_limb;
         int emergency_iterator = 0;
         std::vector<Node> generated_pos;
 
@@ -32,8 +32,8 @@ bool SnakeController::generate_snakes()
                 // generating snake pos
                 int x = rand() % 100;     // snake tail
                 int y = rand() % 100;     // snake tail
-                s_tail = Node(x,y);      // snake tail
-                generated_pos.push_back(s_tail);
+                snake_limb = Node(x,y);      // snake tail
+                generated_pos.push_back(snake_limb);
             }
             bool pos_ok = validate_generated_pos(generated_pos);
             if (pos_ok)
